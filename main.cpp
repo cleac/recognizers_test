@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <iostream>
 #include <signal.h>
+
+//User includes
 #include "recognizer.h"
 
 
@@ -14,9 +16,9 @@ inline static void start() {
 
 inline void finish() {
 	auto end_time = std::chrono::high_resolution_clock::now();
-	fprintf(stderr, "Time elapsed: %lu milisec's\n",
+	fprintf(stderr, "Time elapsed: %lu nanosec's\n",
 	        std::chrono::duration_cast
-	        <std::chrono::miliseconds>(end_time - start_time).count());
+	        <std::chrono::nanoseconds>(end_time - start_time).count());
 }
 };//TIMER
 
