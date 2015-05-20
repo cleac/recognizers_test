@@ -3,7 +3,7 @@ PROJNAME = pattern_test
 CFLAGS = -Wall -O0 -std=c++11
 CFLAGS_DEBUG = $(CFLAGS) --debug
 
-SRC = main.cpp recognizer.cpp
+SRC = main.cpp
 DEPS = $(SRC) recognizer.h
 
 all: $(DEPS)
