@@ -33,8 +33,22 @@ int main(int argc, char const *argv[])
 {
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTERM, signal_callback_handler);
+	FRecognizer recognizer;
+
+	int first_size = 1000, sec_size = 1000;
+	double *first_seq = new double[first_size],
+	*sec_seq = new double[sec_size];
+	for ( int i = 0 ; i < first_size; i++) {
+		*(first_seq + i) = 1;
+	}
+	for ( int i = 0 ; i < first_size; i++) {
+		*(sec_seq + i) = 20;
+	}
 	program_timer::start();
-	FRecognizer recognzer;
+	double res = recognizer.
+	             CompareData(first_seq, first_size, sec_seq, sec_size, 1);
+	fprintf(stderr, "Result %lf\n", res);
+
 	program_timer::finish();
 	return 0;
 }
