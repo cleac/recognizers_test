@@ -7,6 +7,7 @@ extern "C" {
 
 #include <math.h>
 #include <stdio.h>
+#include "fake_templates.h"
 
 #define min(x,y)    (x>y)?y:x
 
@@ -16,6 +17,8 @@ const double DWTCompare(const double* first, const int f_index,
 const double CompareData(const double* first_sequence, const int first_size,
                          const double* sec_sequence,  const int sec_size,
                          const int dim_count);
+const int findMatch(const double* data, int len);
+
 
 static double* recognition_table;
 
@@ -24,15 +27,11 @@ const double CompareData(const double* first_sequence, const int first_size,
                          const double* sec_sequence,  const int sec_size,
                          const int dim_count)
 {
-    recognition_table = (double*)
-                        malloc((sizeof(double) * first_size * sec_size));
     for (int i = 0 ; i < first_size * sec_size; i++)
         *(recognition_table + i) = -1.0;
-    double result = DWTCompare(first_sequence, first_size - 1,
-                               sec_sequence, sec_size - 1,
-                               dim_count);
-    free(recognition_table);
-    return result;
+    return DWTCompare(first_sequence, first_size - 1,
+                      sec_sequence, sec_size - 1,
+                      dim_count);
 }
 
 const double DWTCompare(const double* first, const int f_index,
@@ -61,6 +60,25 @@ const double DWTCompare(const double* first, const int f_index,
         *iterator += min(min(w0, w1), w2);
     }
     return *iterator;
+}
+
+const int findMatch(const double* data, int len) {
+    int result = -1;
+    double impossibility = 1e+300;
+    recognition_table = (double*)
+                        malloc((sizeof(double) * templates_length * len));
+    for (int i = 0 ; i < templates_count ; i++) {
+        double cur_impos = CompareData(
+                               data, len,
+                               getTemplate(i), templates_length,
+                               dimension_count);
+        if (impossibility > cur_impos) {
+            impossibility = cur_impos;
+            result = i;
+        }
+    }
+    free(recognition_table);
+    return result;
 }
 
 #ifdef __cplusplus

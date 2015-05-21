@@ -4,7 +4,8 @@
 #include <signal.h>
 
 //User includes
-#include "recognizer.h"
+#include "uwave_recognizer.h"
+#include "fake_templates.h"
 
 
 namespace program_timer {
@@ -16,9 +17,9 @@ inline static void start() {
 
 inline void finish() {
 	auto end_time = std::chrono::high_resolution_clock::now();
-	fprintf(stderr, "Time elapsed: %lu nanosec's\n",
+	fprintf(stderr, "Time elapsed: %lu microsec's\n",
 	        std::chrono::duration_cast
-	        <std::chrono::nanoseconds>(end_time - start_time).count());
+	        <std::chrono::microseconds>(end_time - start_time).count());
 }
 };//TIMER
 
@@ -32,22 +33,25 @@ void signal_callback_handler(int signum) {
 int main(int argc, char const *argv[]) {
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTERM, signal_callback_handler);
-	int first_size = 5000, sec_size = 5000;
-	int dim_count = 6;
-	double *first_seq = new double[first_size * dim_count],
-	*sec_seq = new double[sec_size * dim_count];
-	for ( int i = 0 ; i < first_size; i++) {
-		for (int j = 0; j < dim_count; j++) {
-			*(first_seq + i * dim_count + j) = 1;
-			*(sec_seq + i * dim_count + j) = -5;
-		}
-	}
-	fprintf(stderr, "Benchmarking recognition of %i dimensions\n", dim_count);
-	program_timer::start();
-	double res = CompareData(first_seq, first_size, sec_seq, sec_size, dim_count);
-	program_timer::finish();
-	delete[] first_seq;
-	delete[] sec_seq;
-	fprintf(stderr, "Result %lf\n", res);
+	//Init test parameters
+	const int dim_count = 6;
+	const int templates_count = 250;
+	const int template_len = 50;
+	//Init fake test data
+	double* fake_data = new double[dim_count * template_len];
+	for (int i = 0 ; i < template_len ; i++)
+		for (int j = 0; j < dim_count; j++)
+			*(fake_data + i * dim_count + j) = 10;
+	//Init fake test templates
+	initTestTemplates(templates_count, dim_count, template_len);
+	//Benchmark algorythm
+	int result = -1;
+	program_timer::start(); {
+		// double res = CompareData(first_seq, first_size, sec_seq, sec_size, dim_count);
+		result = findMatch(fake_data,template_len);
+	} program_timer::finish();
+	delete[] fake_data;
+	fprintf(stderr, "%i\n", result);
+	clearTestTemplates();
 	return 0;
 }
