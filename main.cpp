@@ -1,10 +1,28 @@
+/*
+This file is part of recognizers_test
+
+Copyright (C) 2015  Alexander Nesterenko <nestorf250@gmail.com>
+
+This program is free software: you can redistribute it and / or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see < http : //www.gnu.org/licenses/>.
+*/
+
 #include <chrono>
 #include <unistd.h>
 #include <iostream>
+#include <cstring>
 #include <signal.h>
 
-//User includes
-// #include "uwave_recognizer.h"
 #include "criteria_recognizer.h"
 #include "fake_templates.h"
 
@@ -32,6 +50,14 @@ void signal_callback_handler(int signum) {
 }
 
 int main(int argc, char const *argv[]) {
+	if (argc > 1 && !strcmp(argv[1], "-h")) {
+		printf("%s\n", "recognizers_test  Copyright (C) 2015  Alexander Nesterenko <nestorf250@gmail.com>\n"
+		       "This program comes with ABSOLUTELY NO WARRANTY.\n"
+		       "This is free software, and you are welcome to redistribute it\n"
+		       "under certain conditions.\n");
+		exit(0);
+	}
+
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTERM, signal_callback_handler);
 	//Init test parameters
@@ -49,7 +75,7 @@ int main(int argc, char const *argv[]) {
 	int result = -1;
 	program_timer::start(); {
 		// double res = CompareData(first_seq, first_size, sec_seq, sec_size, dim_count);
-		result = findMatch(fake_data,template_len);
+		result = findMatch(fake_data, template_len);
 	} program_timer::finish();
 	delete[] fake_data;
 	fprintf(stderr, "%i\n", result);
