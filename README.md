@@ -16,6 +16,6 @@ This is a project for testing recognition algorythms and mesuring such parameter
  - Dynamic Time Warp (tag *comparsion_recognition*)
  
 ### Usage:
- 1. Clone the repo (e.g. ***git clone https://github.com/cleac/recognizers_test***)
- 2. Checkout to tag you're interested (e.g. ***git checkout comparsion_recognition***)
- 3. Call command ***make*** (or ***make all*** =))
+ 1. Clone the repo (e.g. `git clone https://github.com/cleac/recognizers_test`)
+ 2. Checkout to tag you're interested (e.g. `git checkout comparsion_recognition`)
+ 3. Call command `make` (or `make all`) - you will get all the info in the stdout
