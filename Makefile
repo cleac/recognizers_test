@@ -9,6 +9,7 @@ DEPS = $(SRC) uwave_recognizer.h
 all: $(DEPS)
 	$(CXX) -o$(PROJNAME) $(SRC) $(CFLAGS_DEBUG)
 	valgrind ./$(PROJNAME)
+	./$(PROJNAME)
 
 clean:
 	rm $(PROJNAME)

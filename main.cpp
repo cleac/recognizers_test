@@ -4,7 +4,8 @@
 #include <signal.h>
 
 //User includes
-#include "uwave_recognizer.h"
+// #include "uwave_recognizer.h"
+#include "criteria_recognizer.h"
 #include "fake_templates.h"
 
 
@@ -35,7 +36,7 @@ int main(int argc, char const *argv[]) {
 	signal(SIGTERM, signal_callback_handler);
 	//Init test parameters
 	const int dim_count = 6;
-	const int templates_count = 250;
+	const int templates_count = 4;
 	const int template_len = 50;
 	//Init fake test data
 	double* fake_data = new double[dim_count * template_len];

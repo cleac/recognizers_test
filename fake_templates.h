@@ -6,13 +6,13 @@
 void initTestTemplates(int count, int dim_count, int length);
 void clearTestTemplates();
 double* getTemplate(int num);
+int getTemplateCount();
+int getTemplateLength();
 
 static double* test_templates;
 static int templates_length = 0;
 static int templates_count = 0;
 static int dimension_count = 0;
-
-
 
 void initTestTemplates(int count, int dim_count, int length) {
     templates_count = count;
@@ -39,6 +39,14 @@ double* getTemplate(int num) {
         return test_templates + num * templates_length * dimension_count;
     else
         return NULL;
+}
+
+int getTemplateCount(){
+    return templates_count;
+}
+
+int getTemplateLength(){
+    return templates_length;
 }
 
 #endif // FAKE_TEMPLATES_H
