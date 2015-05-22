@@ -8,7 +8,10 @@ DEPS = $(SRC) uwave_recognizer.h
 
 all: $(DEPS)
 	$(CXX) -o$(PROJNAME) $(SRC) $(CFLAGS_DEBUG)
+	echo "Measuring memory needed by algorythm, time will be uncertain"
 	valgrind ./$(PROJNAME)
+	echo "Measuring time of algorythm work" 
+	./$(PROJNAME)
 
 clean:
 	rm $(PROJNAME)
