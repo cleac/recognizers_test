@@ -75,7 +75,8 @@ int main(int argc, char const *argv[]) {
 	int result = -1;
 	program_timer::start(); {
 		// double res = CompareData(first_seq, first_size, sec_seq, sec_size, dim_count);
-		result = findMatch(fake_data, template_len);
+		/*result = findMatch(fake_data, template_len);*/
+		buildTree(fake_data,template_len,1,dim_count);
 	} program_timer::finish();
 	delete[] fake_data;
 	fprintf(stderr, "%i\n", result);

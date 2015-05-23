@@ -30,50 +30,17 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-void createFakeStateTable();
-void learnNewState(const double* data, int len);
-void updateState(const double* data, int len, _state* targ);
-void initRecognizer();
-const int findMatch(const double* data, int len);
+static _criteria tree_null_level;
 
-float pointDifferenceGaussian(int *first, int *second, int dimension_count);
+void buildTree(double *input_data, int input_len, int input_count, int dim_count);
 
-void initRecognizer() {
-    if (!state)
-        state = (_state*)malloc(sizeof(_state));
+void buildTree(double *input_data, int input_len, int input_count, int dim_count) {
+    //Read first point
+    _criteria* first = newFork_withCoo(&tree_null_level,input_data);
+    //Create first level criteria
+    tree_null_level.next_level = (_criteria*)malloc(sizeof(_criteria));
 }
 
-float pointDifferenceGaussian(int *first, int *second, int dimension_count) {
-    int arg = 0;
-    while (dimension_count--) {
-        arg += (*first) * (*first) + (*second) * (*second);
-        first++;
-        second++;
-    }
-    return exp(-(arg) / 8);
-}
-
-const int findMatch(const double* data, int len) {
-    initRecognizer();
-    createFakeStateTable();
-    return 0;
-}
-
-void createFakeStateTable() {
-    int count = getTemplateCount();
-    for (int i = 0 ; i < count; i++)
-        learnNewState(getTemplate(i), getTemplateLength());
-}
-
-void learnNewState(const double* data, int len) {
-    _state* lastState = getLastState();
-    lastState->next = (_state*)malloc(sizeof(state));
-    lastState->next->index = lastState->index;
-    int* coordinate_criteria = {};
-    while (len--) {
-
-    }
-}
 
 #ifdef __cplusplus
 }
