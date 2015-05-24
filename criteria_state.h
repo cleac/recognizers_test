@@ -26,10 +26,12 @@ extern "C" {
 
 struct _criteria {
     double* coordinates;
+    int repeat_count;
     int dim_count;
     int next_count;
     _criteria* next_level;
 };
+
 /**
  * @brief newFork(..) - creates new fork on next level from parent
  *
@@ -59,80 +61,20 @@ void deleteForkNumber(_criteria* parent, int number);
 
 /**
  * @brief deletes all the forks of current parent
- *
+ * 
  * @param parent pointer to upper level _criteria instance
  */
-void clearForks(_criteria* parent);
+void clearLevel(_criteria* parent);
 
-_criteria* newFork(_criteria* parent) {
-    //Result variable
-    _criteria* new_fork;
-    //If there exists next level (any) we have to copy them first
-    if (parent->next_level) {
-        //Save old data to copy it afterwords
-        _criteria* tmp = parent->next_level;
-        //We get block of memoty for new amount of data
-        parent->next_level = (_criteria*)malloc(sizeof(_criteria) *
-                                                (parent->next_count + 1));
-        int count = parent->next_count;
-        _criteria *iter_old = tmp, *iter_new = parent->next_level;
-        //We copy the data, that existed before
-        while (count--)
-            *(iter_new++) = *(iter_old++);
-        //Then free it
-        free(tmp);
-        //And initialize new amount of data
-        iter_new->dim_count = parent->dim_count;
-        iter_new->next_count = 0;
-        iter_new->coordinates = (double*)malloc(sizeof(double) * parent->dim_count);
-        new_fork = iter_new;
-    } else { //Otherwise we create next level
-        new_fork = parent->next_level = (_criteria*)malloc(sizeof(_criteria));
-    }
-    //And increment new counter of next level forks
-    (parent->next_count)++;
-    return new_fork;
-}
-
-_criteria* newFork_withCoo(_criteria* parent, double* coo) {
-    //We get pointer to new fork
-    _criteria* new_fork = newFork(parent);
-    //And copy data from input pointer coo to this fork
-    for (int i = 0; i < new_fork->dim_count; ++i) {
-        new_fork->coordinates[i] = coo[i];
-    }
-    return new_fork;
-}
-
-void deleteForkNumber(_criteria* parent, int number) {
-    //Recoursively clear all forks under fork to be deleted
-    for (int i = 0 ; i < parent->next_count; ++i)
-        deleteForkNumber(parent->next_level + number, i);
-    //Then if current fork is not the only one - we have to copy all forks exists
-    if (parent->next_count > 1) {
-        _criteria* tmp = parent->next_level;
-        parent->next_level = (_criteria*)malloc(sizeof(_criteria) *
-                                                (parent->next_count - 1));
-        int count = parent->next_count;
-        _criteria *iter_old = tmp, *iter_new = parent->next_level;
-        while (count--, iter_old++) {
-            if (parent->next_count - count != number)
-                *iter_new = *iter_old;
-        }
-        free(tmp);
-    } else if (parent->next_count) {
-        free(parent->next_level);
-    }
-    parent->next_count--;
-}
-
-void clearForks(_criteria* parent) {
-    _criteria* iter = parent->next_level;
-    while (parent->next_count--, iter++)
-        clearForks(iter);
-    free(parent->coordinates);
-    free(parent->next_level);
-}
+/**
+ * @brief criteriaCompare_Gauss(..) compares element by using Gauss formula
+ * 
+ * @param current current _criteria to be compared with data
+ * @param coo input data to be compared with current _criteria
+ * 
+ * @return result of comparation, in range {0..1}
+ */
+double criteriaCompare_Gauss(_criteria* current, double* coo);
 
 #ifdef __cplusplus
 }

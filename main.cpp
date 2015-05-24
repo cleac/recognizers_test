@@ -50,13 +50,11 @@ void signal_callback_handler(int signum) {
 }
 
 int main(int argc, char const *argv[]) {
-	if (argc > 1 && !strcmp(argv[1], "-h")) {
-		printf("%s\n", "recognizers_test  Copyright (C) 2015  Alexander Nesterenko <nestorf250@gmail.com>\n"
-		       "This program comes with ABSOLUTELY NO WARRANTY.\n"
-		       "This is free software, and you are welcome to redistribute it\n"
-		       "under certain conditions.\n");
-		exit(0);
-	}
+	printf("%s\n", "recognizers_test  Copyright (C) 2015  Alexander Nesterenko <nestorf250@gmail.com>\n"
+	       "This program comes with ABSOLUTELY NO WARRANTY.\n"
+	       "This is free software, and you are welcome to redistribute it\n"
+	       "under certain conditions.\n");
+	exit(0);
 
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTERM, signal_callback_handler);
@@ -74,9 +72,8 @@ int main(int argc, char const *argv[]) {
 	//Benchmark algorythm
 	int result = -1;
 	program_timer::start(); {
-		// double res = CompareData(first_seq, first_size, sec_seq, sec_size, dim_count);
-		/*result = findMatch(fake_data, template_len);*/
-		buildTree(fake_data,template_len,1,dim_count);
+		buildTree(fake_data, template_len, 1, dim_count);
+		freeTable();
 	} program_timer::finish();
 	delete[] fake_data;
 	fprintf(stderr, "%i\n", result);

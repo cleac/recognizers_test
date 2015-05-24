@@ -30,17 +30,46 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-static _criteria tree_null_level;
+static _criteria tree_null_level = {0, 0, 0, 0, 0};
+static _criteria* current_position;
 
 void buildTree(double *input_data, int input_len, int input_count, int dim_count);
+void findMatch(double *input_data);
+void freeTable();
 
 void buildTree(double *input_data, int input_len, int input_count, int dim_count) {
     //Read first point
-    _criteria* first = newFork_withCoo(&tree_null_level,input_data);
-    //Create first level criteria
-    tree_null_level.next_level = (_criteria*)malloc(sizeof(_criteria));
+    tree_null_level.dim_count = dim_count;
+    const int c_input_len = input_len;
+    const double* data_start = input_data;
+    double* data_iter = input_data;
+    while (input_count--) {
+        _criteria* current_criteria =
+            newFork_withCoo(&tree_null_level, data_iter);
+        do {
+            data_iter += dim_count;
+            double difference = criteriaCompare_Gauss(current_criteria, data_iter);
+            if (difference > 0.5)
+                current_criteria =
+                    newFork_withCoo(current_criteria, data_iter);
+            else
+                current_criteria->repeat_count++;
+        } while (input_len--);
+        input_len = c_input_len;
+    }
 }
 
+void freeTable() {
+    clearLevel(&tree_null_level);
+}
+
+/*_criteria* findMatch(double* input_data) {
+    if(current_position) {
+        //TODO
+    } else {
+        tree_null_level.next_count = 
+    }
+}*/
 
 #ifdef __cplusplus
 }
