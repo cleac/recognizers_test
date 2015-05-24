@@ -20,53 +20,74 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 #ifndef FAKE_TEMPLATES_H
 #define FAKE_TEMPLATES_H
 
-#include <stdlib.h>
-
+/**
+ * @brief initTestTemplates(..) - inits test templates
+ *
+ * @param count - count of templates to be created
+ * @param dim_count - count of dimensions
+ * @param length of templates
+ */
 void initTestTemplates(int count, int dim_count, int length);
+
+/**
+ * @brief clearTestTemplates() - frees memory of templates
+ */
 void clearTestTemplates();
+
+/**
+ * @brief getTemplate(..)
+ *
+ * @param num - number of template
+ * @return template number num
+ */
 double* getTemplate(int num);
-int getTemplateCount();
-int getTemplateLength();
 
-static double* test_templates;
-static int templates_length = 0;
-static int templates_count = 0;
-static int dimension_count = 0;
+/**
+ * @brief getTemplateValueOnPos(..)
+ *
+ * @param templ_num - number of template
+ * @param pos - position of data
+ * @return template number num
+ */
+double* getTemplateValueOnPos(int templ_num, int pos);
 
-void initTestTemplates(int count, int dim_count, int length) {
-    templates_count = count;
-    templates_length = length;
-    dimension_count = dim_count;
-    test_templates = (double*)
-                     malloc(sizeof(double) * dim_count * count * length);
-    for (int i = 0; i < count; i++) {
-        for (int j = 0; j < length; j++) {
-            for (int k = 0 ; k < dim_count ; k++)
-                *(test_templates + i * length * dim_count + j * dim_count + k) = i + 1;
-        }
-    }
-}
+/**
+ * @brief getTemplateCount()
+ * @return count of temlates
+ */
+const int getTemplateCount();
 
-void clearTestTemplates() {
-    templates_count = 0;
-    templates_length = 0;
-    free(test_templates);
-}
+/**
+ * @brief getTemplateLength()
+ * @return length of templates
+ */
+const int getTemplateLength();
 
-double* getTemplate(int num) {
-    if (num < templates_count && num > -1)
-        return test_templates + num * templates_length * dimension_count;
-    else
-        return NULL;
-}
+/**
+ * @brief getTemplateMemoryUsage()
+ * @return memory of templates used in program
+ */
+const unsigned int getTemplateMemoryUsage();
 
-int getTemplateCount(){
-    return templates_count;
-}
+/**
+ * @brief getFakeData()
+ *
+ * @param dim_count - count of dimensions
+ * @param length of data to be created
+ *
+ * @return pointer to created fake data
+ */
+double* getFakeData(int dim_count, int length);
 
-int getTemplateLength(){
-    return templates_length;
-}
+/**
+ * @brief freeFakeData()
+ *
+ * @param dim_count - count of dimensions
+ * @param length of data to be created
+ *
+ * @return pointer to created fake data
+ */
+void freeFakeData();
 
 #endif // FAKE_TEMPLATES_H
 
