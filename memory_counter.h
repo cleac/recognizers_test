@@ -17,42 +17,20 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 */
 
-#ifndef CRITERIA_STATE_H
-#define CRITERIA_STATE_H
+#ifndef MEMORY_COUNTER_H
+#define MEMORY_COUNTER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdlib.h>
 
-struct _criteria {
-    int lin[3];
-    int count;
-    _criteria* next;
-};
+uint64_t m_allocated_memory = 0;
 
-struct _state {
-    int index;
-    _criteria criteria;
-    _state* next;
-};
-_state* getLastState();
-_state* getFirstState();
-
-static _state* state;
-
-_state* getLastState() {
-    _state* iter = state;
-    while (iter->next)
-        iter = iter->next;
-    return iter;
+void* getmem(uint64_t count) {
+    m_allocated_memory += count;
+    return malloc(count);
 }
 
-_state* getFirstState() {
-    return state;
+uint64_t getUsedMemory() {
+    return m_allocated_memory;
 }
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif // CRITERIA_STATE_H
+#endif // MEMORY_COUNTER_H
