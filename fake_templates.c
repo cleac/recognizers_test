@@ -29,6 +29,10 @@ static double* fake_data;
 
 static unsigned int memory_usage = 0;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void initTestTemplates(int count, int dim_count, int length) {
     memory_usage = 0;
     templates_count = count;
@@ -92,6 +96,10 @@ double* getFakeData(int dim_count, int length) {
 }
 
 void freeFakeData() {
-    if(fake_data)
+    if (fake_data)
         free(fake_data);
 }
+
+#ifdef __cplusplus
+}
+#endif
