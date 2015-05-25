@@ -20,6 +20,10 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 #ifndef FAKE_TEMPLATES_H
 #define FAKE_TEMPLATES_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief initTestTemplates(..) - inits test templates
  *
@@ -89,6 +93,9 @@ double* getFakeData(int dim_count, int length);
  */
 void freeFakeData();
 
+#ifdef __cplusplus
+}
+#endif
 #endif // FAKE_TEMPLATES_H
 
 

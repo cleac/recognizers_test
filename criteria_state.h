@@ -24,13 +24,13 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-struct _criteria {
+typedef struct {
     double* coordinates;
     int repeat_count;
     int dim_count;
     int next_count;
-    _criteria* next_level;
-};
+    void* next_level;
+} _criteria;
 
 /**
  * @brief newFork(..) - creates new fork on next level from parent

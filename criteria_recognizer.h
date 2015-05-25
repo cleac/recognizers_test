@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 static _criteria tree_null_level = {0, 0, 0, 0, 0};
-static _criteria* current_position;
+// static _criteria* current_position;
 
 void buildTree(double *input_data, int input_len, int input_count, int dim_count);
 void findMatch(double *input_data);
@@ -41,7 +41,6 @@ void buildTree(double *input_data, int input_len, int input_count, int dim_count
     //Read first point
     tree_null_level.dim_count = dim_count;
     const int c_input_len = input_len;
-    const double* data_start = input_data;
     double* data_iter = input_data;
     while (input_count--) {
         _criteria* current_criteria =

@@ -20,17 +20,22 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 #ifndef MEMORY_COUNTER_H
 #define MEMORY_COUNTER_H
 
-#include <stdlib.h>
+#include "fake_templates.h"
+#include <stdint.h>
 
-uint64_t m_allocated_memory = 0;
+#define init_analyze    init_test();
+#define end_analyze     finish_test();
 
-void* getmem(uint64_t count) {
-    m_allocated_memory += count;
-    return malloc(count);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void init_test();
+void finish_test();
+
+void* getMemBlock(uint64_t count);
+
+#ifdef __cplusplus
 }
-
-uint64_t getUsedMemory() {
-    return m_allocated_memory;
-}
-
+#endif
 #endif // MEMORY_COUNTER_H

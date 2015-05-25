@@ -17,42 +17,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 */
 
-#include <chrono>
-#include <unistd.h>
-#include <iostream>
-#include <cstring>
+
+#include <stdio.h>
+#include <string.h>
 #include <signal.h>
 
-#include "memory_counter.h"
 #include "fake_templates.h"
-
-#define init_analyze	algo_analyzer::init();
-#define end_analyze		algo_analyzer::finish();
-
-
-namespace algo_analyzer {
-static auto start_time = std::chrono::high_resolution_clock::now();
-
-inline static void init() {
-	algo_analyzer::start_time = std::chrono::high_resolution_clock::now();
-
-}
-
-inline void finish() {
-	auto end_time = std::chrono::high_resolution_clock::now();
-	clearTestTemplates();
-	freeFakeData();
-	fprintf(stderr, "Time elapsed: %lu microsec's\n",
-	        std::chrono::duration_cast
-	        <std::chrono::microseconds>(end_time - start_time).count());
-	fprintf(stderr, "Memory of templates used %u\n", getTemplateMemoryUsage());
-	fprintf(stderr, "Memory allocated by classifier %lu\n", getUsedMemory());
-}
-};
+#include "criteria_recognizer.h"
+#include "algo_analyzer.h"
 
 void signal_callback_handler(int signum) {
 	if (signum == SIGTERM || signum == SIGINT) {
-		algo_analyzer::finish();
+		finish_test();
 		exit(0);
 	}
 }
@@ -62,16 +38,15 @@ int main(int argc, char const *argv[]) {
 	       "This program comes with ABSOLUTELY NO WARRANTY.\n"
 	       "This is free software, and you are welcome to redistribute it\n"
 	       "under certain conditions.\n\n");
-	//Set handlers to be able to kill program
+	//Set handlers to be able to kill program if it stucks somewhere
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTERM, signal_callback_handler);
-
 	//Init test parameters
 	const int dim_count = 6;
 	const int templates_count = 4;
 	const int template_len = 50;
 	//Init fake test data
-	double* fake_data = getFakeData(dim_count,template_len);
+	double* fake_data = getFakeData(dim_count, template_len);
 	for (int i = 0 ; i < template_len ; i++)
 		for (int j = 0; j < dim_count; j++)
 			*(fake_data + i * dim_count + j) = 10;
@@ -79,11 +54,10 @@ int main(int argc, char const *argv[]) {
 	initTestTemplates(templates_count, dim_count, template_len);
 	//Benchmark algorythm
 	int result = -1;
-	init_analyze
-	{
+	init_analyze {
+		buildTree(fake_data, template_len, templates_count, dim_count);
 		/*result = findMatch(fake_data, template_len);*/
-	} 
-	end_analyze
+	} end_analyze
 	fprintf(stderr, "Recognized: %i\n", result);
 	return 0;
 }
