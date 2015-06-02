@@ -20,9 +20,6 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 #ifndef CRITERIA_RECOGNIZER_H
 #define CRITERIA_RECOGNIZER_H
 
-
-#include <stdlib.h>
-#include <math.h>
 #include "fake_templates.h"
 #include "criteria_state.h"
 
@@ -30,45 +27,36 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-static _criteria tree_null_level = {0, 0, 0, 0, 0};
-// static _criteria* current_position;
+/**
+ * @brief addToTree(..)
+ * @details adds new patg to tree (or updates path that exists)
+ *
+ * @param input_data    - analyzed data to be appended
+ * @param input_len     - length of input_data
+ * @param dim_count     - count of dimensions of inputted data
+ */
+void addToTree(double *input_data, int input_len, int dim_count);
 
-void buildTree(double *input_data, int input_len, int input_count, int dim_count);
-void findMatch(double *input_data);
-void freeTable();
+/**
+ * @brief initRecognizer()
+ * @details function that init's recognizer (in test cases takes fake data)
+ */
+void initRecognizer();
 
-void buildTree(double *input_data, int input_len, int input_count, int dim_count) {
-    //Read first point
-    tree_null_level.dim_count = dim_count;
-    const int c_input_len = input_len;
-    double* data_iter = input_data;
-    while (input_count--) {
-        _criteria* current_criteria =
-            newFork_withCoo(&tree_null_level, data_iter);
-        do {
-            data_iter += dim_count;
-            double difference = criteriaCompare_Gauss(current_criteria, data_iter);
-            if (difference > 0.5)
-                current_criteria =
-                    newFork_withCoo(current_criteria, data_iter);
-            else
-                current_criteria->repeat_count++;
-        } while (input_len--);
-        input_len = c_input_len;
-    }
-}
+/**
+ * @brief releaseRecignizer()
+ * @details function that free's memory of recognizer
+ */
+void releaseRecognizer();
 
-void freeTable() {
-    clearLevel(&tree_null_level);
-}
-
-/*_criteria* findMatch(double* input_data) {
-    if(current_position) {
-        //TODO
-    } else {
-        tree_null_level.next_count = 
-    }
-}*/
+/**
+ * @brief findMatch(..)
+ * @details finds match to current data
+ * 
+ * @param input_data    - data to be analyzed
+ * @param dim_count     - count of dimensions of data
+ */
+int findMatch(double *input_data, int dim_count);
 
 #ifdef __cplusplus
 }

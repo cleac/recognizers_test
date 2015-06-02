@@ -21,6 +21,7 @@ along with this program.  If not, see < http : //www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
+#include <stdlib.h>
 
 #include "fake_templates.h"
 #include "criteria_recognizer.h"
@@ -42,9 +43,9 @@ int main(int argc, char const *argv[]) {
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTERM, signal_callback_handler);
 	//Init test parameters
-	const int dim_count = 6;
-	const int templates_count = 4;
-	const int template_len = 50;
+	const int dim_count = 2;
+	const int templates_count = 2;
+	const int template_len = 2;
 	//Init fake test data
 	double* fake_data = getFakeData(dim_count, template_len);
 	for (int i = 0 ; i < template_len ; i++)
@@ -55,8 +56,10 @@ int main(int argc, char const *argv[]) {
 	//Benchmark algorythm
 	int result = -1;
 	init_analyze {
-		buildTree(fake_data, template_len, templates_count, dim_count);
+		// buildTree(fake_data, template_len, 1, dim_count);
+		initRecognizer();
 		/*result = findMatch(fake_data, template_len);*/
+		releaseRecognizer();
 	} end_analyze
 	fprintf(stderr, "Recognized: %i\n", result);
 	return 0;

@@ -68,6 +68,12 @@ const int getTemplateCount();
 const int getTemplateLength();
 
 /**
+ * @brief getDimensionCount()
+ * @return count of dimensions
+ */
+const int getDimensionCount();
+
+/**
  * @brief getTemplateMemoryUsage()
  * @return memory of templates used in program
  */

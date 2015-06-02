@@ -84,6 +84,10 @@ const int getTemplateLength() {
     return templates_length;
 }
 
+const int getDimensionCount() {
+    return dimension_count;
+}
+
 const unsigned int getTemplateMemoryUsage() {
     return memory_usage;
 }
