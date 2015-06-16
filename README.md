@@ -9,7 +9,7 @@ This is a project for testing recognition algorythms and mesuring such parameter
  
 ### Dependencies:
  - **gcc 4.8+** (this is the lowest version I tried to build it on; i think it's definitely could be build on lower versions)
- - **make**
+ - **CMake 2.8+**
  
 ### Implemented algorythms:
  - Dynamic Time Warp (branch *comparsion_recognition*)
